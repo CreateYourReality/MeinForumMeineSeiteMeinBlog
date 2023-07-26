@@ -22,7 +22,7 @@ const postSchema = new mongoose.Schema({
             url: String,
             imageId: String,
         },
-        required: true
+        required: false
     }
 })
 

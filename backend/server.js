@@ -5,7 +5,10 @@ import multer from "multer";
 import { v2 as cloudinary } from 'cloudinary';
 import { Post } from "./models/PostModel.js"
 import { Author } from "./models/AuthorModel.js"
+import { Hakunamatata } from "./models/hakunamatataMode.js";
 import "./models/index.js"
+import CollectionName from "./models/index.js";
+
 
           
 cloudinary.config({ 
@@ -18,7 +21,7 @@ const app = express();
 const PORT = 3001;
 const upload = multer({ storage: multer.memoryStorage() })
 
-//app.use(cors())
+app.use(cors())
 app.use(morgan("dev"))
 app.use(express.json())
 
@@ -88,5 +91,17 @@ app.get("/author/:authorId", async (req, res) => {
         res.send("there was an error");
     }
 });
+
+app.get('/collectionNames', async (req, res) => {
+    try {
+
+      const collections = await CollectionName
+      res.json(collections);
+
+    } catch (error) {
+      console.error('Error fetching collection names:', error);
+      res.status(500).json({ error: 'Failed to fetch collection names' });
+    }
+  });
 
 app.listen(PORT, () => console.log("Der Server läuft", PORT))
