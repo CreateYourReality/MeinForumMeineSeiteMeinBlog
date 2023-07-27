@@ -3,6 +3,7 @@ import { useEffect, useContext } from "react";
 import {NavLink} from "react-router-dom";
 import "./Home.css"
 import { categorieContext } from "../../context/Context";
+import CreatePost from "../components/CreatePost";
 
 const Home = () => {
     const {allCategories,setAllCategories} = useContext(categorieContext);
@@ -25,9 +26,10 @@ useEffect(() => {
         <>
             <main>
                 <h1>777kun</h1>
+                <CreatePost/>
                 {allCategories?
                   allCategories.map((categorie,index) => {
-                    return <NavLink key={index} to={`./categorie/${categorie}`} > {categorie} </NavLink>
+                    return <NavLink key={index} to={`./categories/${categorie}`} > {categorie} </NavLink>
                   })
                 :
                 <p>WAIT FOR DATA...</p>
