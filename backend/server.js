@@ -27,19 +27,7 @@ app.use(cors())
 app.use(morgan("dev"))
 app.use(express.json())
 
-app.get("/categories/:name/:id", async (req, res) => {
-    const postId = req.params.id;
-    console.log(req.params.name);
 
-    try {
-        const Post = mongoose.model(req.params.name, postSchema)
-        const dbRes = await Post.find({ id: postId });
-        res.json(dbRes);
-    } catch (err) {
-        console.log(err);
-        res.send("there was an error");
-    }
-});
 
 app.get("/777kun", async (req, res) => {
     const data = await Post.find()
@@ -54,13 +42,27 @@ app.get("/categories/:name", async(req,res) => {
     res.json(data);
 })
 
+app.get("/categories/:name/:id", async (req, res) => {
+    const postId = req.params.id;
+    console.log(req.params.name);
+
+    try {
+        const Post = mongoose.model(req.params.name, postSchema)
+        const dbRes = await Post.find({ _id: postId });
+        res.json(dbRes);
+    } catch (err) {
+        console.log(err);
+        res.send("there was an error");
+    }
+});
+
 
 app.post("/categories/:name", upload.single("image"), async (req, res) => {
     try {
-        const author = await Author.findById(req.body.author)
+      /*  const author = await Author.findById(req.body.author)
         if (author === null) {
-            return res.send("Author is invalid")
-        }
+          return res.send("Author is invalid")
+        } */
         const Post = mongoose.model(req.params.name, postSchema)
        cloudinary.uploader.upload_stream({ resource_type: "image", folder: "777kun" }, async (err, result) => {
             const response = await Post.create({ ...req.body, image: { url: result.secure_url, imageId: result.public_id } })
@@ -103,7 +105,7 @@ app.put("/categorie/:name/:id", async (req, res) => {
         res.send("there was an error");
     }
 }); */
-
+/*
 app.delete("/posts/:id", async (req, res) => {
     const postId = req.params.id;
     try {
@@ -114,8 +116,8 @@ app.delete("/posts/:id", async (req, res) => {
         console.log(err);
         res.send("there was an error");
     }
-});
-
+}); */
+/*
 app.post("/author", async (req, res) => {
     try {
         const newAuthor = await Author.create(req.body);
@@ -136,7 +138,7 @@ app.get("/author/:authorId", async (req, res) => {
         console.log(err);
         res.send("there was an error");
     }
-});
+}); */
 
 app.get('/collectionNames', async (req, res) => {
     try {

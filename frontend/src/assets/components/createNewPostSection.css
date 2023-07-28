@@ -8,7 +8,7 @@
 }
 
 
-.createNewPostSection form input{
+.createNewPostSection form input[type="text"]{
     height: 20px;
     width: 200px;
 }
@@ -18,3 +18,13 @@
     height: 150px;
     width: 200px;
 }   
+
+.createNewPostSection form div{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 1px solid black;
+    padding: 10px;
+}

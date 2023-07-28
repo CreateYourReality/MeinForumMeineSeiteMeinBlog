@@ -3,15 +3,19 @@ import Categories from './assets/pages/Categories';
 import './App.css'
 import { BrowserRouter,Routes,Route } from 'react-router-dom'
 import { useContext, useState } from 'react';
-import { categorieContext } from './context/Context';
+import { categorieContext,loggedUserContext } from './context/Context';
+import DetailPost from './assets/pages/DetailPost';
 
 
 function App() {
   const [allCategories,setAllCategories] = useState([])
+  const [loggedUser,setLoggedUser] = useState("64b92ffff9daec0e06c57674")
 
-
+  
   return (
     <>
+  
+    <loggedUserContext.Provider value={{loggedUser,setLoggedUser}}>
     <categorieContext.Provider value={{allCategories,setAllCategories}}>
       <BrowserRouter>
         <Routes>
@@ -24,10 +28,11 @@ function App() {
             <p>WAIT FOR DATA...</p>
           }
                   
-                  <Route path="/categories/:name/:id" element={<Categories/>}> </Route>    
+                  <Route path="/detailpost/:name/:id" element={<DetailPost/>}> </Route>    
         </Routes>
       </BrowserRouter>
       </categorieContext.Provider>
+      </loggedUserContext.Provider>
     </>
   )
 }

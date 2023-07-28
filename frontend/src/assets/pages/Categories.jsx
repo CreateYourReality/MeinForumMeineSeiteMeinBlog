@@ -3,10 +3,13 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import {Link} from "react-router-dom"
+import "./Categories.css"
 
 const Categories = () => {
     const [data,setData] = useState([])
     const {name} = useParams()
+
+
 
 
     useEffect(() => {
@@ -31,11 +34,12 @@ const Categories = () => {
                 {data?
                   data.map((post,index) => {
                     return(
-                      <article key={index}>
+                      <article className="singlePost" key={index}>
                         <h2>{post.title}</h2>
                         <img src={post.image.url} alt="" />
                         <p>{post.content}</p>
                         <p>Author:<Link>{post.author}</Link></p>
+                        <p>To Thread: <Link to={`/detailpost/${name}/${post._id}`}>{post._id}</Link></p>
                       </article>
                     )
                   }) : <p>Wait for data...</p>}

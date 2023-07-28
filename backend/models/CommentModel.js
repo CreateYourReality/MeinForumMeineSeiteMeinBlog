@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
 
 
-export const postSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        minlength: 5,
-        maxlength: 50,
+export const commentSchema = new mongoose.Schema({
+    PostID: {
+        type: mongoose.Types.ObjectId,
         required: true
     },
     content: {
@@ -31,4 +29,4 @@ export const postSchema = new mongoose.Schema({
 
 
 
-export const Post = mongoose.model("Post", postSchema)
+export const Comment = mongoose.model("Comment", commentSchema)
