@@ -24,7 +24,9 @@ export const postSchema = new mongoose.Schema({
         },
         required: false
     },
-    comments:[{type: mongoose.Types.ObjectId}]
+    comments:[ //
+        {type: mongoose.Types.ObjectId,ref:"Comment"}
+    ]
             
     
 })

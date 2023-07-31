@@ -10,6 +10,7 @@ import { Hakunamatata } from "./models/hakunamatataMode.js";
 import "./models/index.js"
 import CollectionName from "./models/index.js";
 import { postSchema } from "./models/PostModel.js";
+import {commentSchema} from "./models/CommentModel.js"
 import mongoose from "mongoose";
 
           
@@ -57,6 +58,22 @@ app.get("/categories/:name/:id", async (req, res) => {
 });
 
 
+app.get("/comments/:id", async (req,res) => {
+    const commentId = req.params.id;
+
+    try{
+        const Comment = mongoose.model(req.params.name, commentSchema)
+        const dbRes = await Comment.find({_id: commentId})
+    } catch (err) {
+        console.log(err);
+        res.send("there was an error");
+    }
+
+})
+
+
+
+
 app.post("/categories/:name", upload.single("image"), async (req, res) => {
     try {
       /*  const author = await Author.findById(req.body.author)
@@ -73,6 +90,47 @@ app.post("/categories/:name", upload.single("image"), async (req, res) => {
         res.status(500).send("there was an error")
     }
 })
+
+
+app.post("/detailpost/:name/:id", upload.single("image"), async (req, res) => {
+    try {
+      /*  const author = await Author.findById(req.body.author)
+        if (author === null) {
+          return res.send("Author is invalid")
+        } */
+        const Comment = mongoose.model("comments", commentSchema) //commentSchema !!!!!!!!!!!!!!!!!!!!!!!!
+       cloudinary.uploader.upload_stream({ resource_type: "image", folder: "777kun" }, async (err, result) => {
+            const response = await Comment.create({ ...req.body, image: { url: result.secure_url, imageId: result.public_id } })
+            res.json(response)
+        }).end(req.file.buffer)
+    } catch (err) {
+        console.log(err)
+        res.status(500).send("there was an error")
+    }
+})
+
+app.put("/detailpost/:name/:id",upload.single() ,async (req, res) => {
+    const postId = req.params.id;
+    const commentId = req.body.commentId
+  //  const commentId = "64c3d1eb2f4a78c9ee85f60a"
+    console.log({commentId})
+    try {
+        const Post = mongoose.model(req.params.name, postSchema)
+        const dbRes = await Post.findOneAndUpdate({ _id: postId }, {"$push": {comments: commentId}}, { new: true })
+        res.json(dbRes);
+    } catch (err) {
+        console.log(err);
+        res.send("there was an error");
+    }
+});
+
+
+
+
+// USER
+
+//app.use("/api/user", userRouter)
+
 
 /*
 app.post("/777kun", upload.single("image"), async (req, res) => {

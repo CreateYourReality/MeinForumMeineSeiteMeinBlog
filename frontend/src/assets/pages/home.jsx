@@ -13,7 +13,7 @@ useEffect(() => {
     try {
       const response = await axios.get('http://localhost:3001/collectionNames');
       setAllCategories(response.data);
-      console.log(response.data);
+   //   console.log(response.data);
     } catch (error) {
       console.error('Fehler beim Abrufen der Daten:', error);
     }

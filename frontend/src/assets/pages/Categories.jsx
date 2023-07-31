@@ -9,15 +9,12 @@ const Categories = () => {
     const [data,setData] = useState([])
     const {name} = useParams()
 
-
-
-
     useEffect(() => {
         const fetchData = async () => {
           try {
             const response = await axios.get(`http://localhost:3001/categories/${name}`); //http://localhost:3001/categories/${name}
             setData(response.data);
-            console.log(response.data);
+       //     console.log(response.data);
           } catch (error) {
             console.error('Fehler beim Abrufen der Daten:', error);
           }

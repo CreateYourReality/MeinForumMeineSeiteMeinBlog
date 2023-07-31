@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 
 export const commentSchema = new mongoose.Schema({
-    PostID: {
+    postId: {
         type: mongoose.Types.ObjectId,
         required: true
     },
@@ -21,8 +21,7 @@ export const commentSchema = new mongoose.Schema({
             imageId: String,
         },
         required: false
-    },
-    comments:[{type: mongoose.Types.ObjectId}]
+    }
             
     
 })
