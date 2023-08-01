@@ -2,16 +2,28 @@ import express from "express"
 import cors from "cors"
 import morgan from "morgan";
 import multer from "multer";
+import mongoose from "mongoose";
 import { v2 as cloudinary } from 'cloudinary';
-import { Test } from "./models/TestModel.js"
+
+//Categorie <Generally> muss default bleiben, der Rest ist frei wählbar
+//Reihenfolge ist Wichtig, die Categories müssen hier aufgelistet werden
+//Nur wenn die Categorie hier importiert wird, wird sie Aufgelistet (ändern später)
+import { General } from "./models/PostModel.js"
 import { Post } from "./models/PostModel.js"
-//import { Author } from "./models/AuthorModel.js"
-import { Hakunamatata } from "./models/hakunamatataMode.js";
-import "./models/index.js"
+import { Hakunamatata } from "./models/PostModel.js";
+import { Test } from "./models/PostModel.js";
+
 import CollectionName from "./models/index.js";
 import { postSchema } from "./models/PostModel.js";
 import {commentSchema} from "./models/CommentModel.js"
-import mongoose from "mongoose";
+
+//import { Author } from "./models/AuthorModel.js"
+import "./models/index.js"
+
+
+
+
+
 
           
 cloudinary.config({ 
@@ -57,8 +69,22 @@ app.get("/categories/:name/:id", async (req, res) => {
     }
 });
 
+app.delete("/categories/:name/:id", async (req, res) => {
+    const postId = req.params.id;
+    const categorieName = req.params.name
+    try {
+        const Post = mongoose.model(categorieName, postSchema)
+        const dbRes = await Post.findByIdAndDelete(postId);
+        cloudinary.uploader.destroy(dbRes.image?.imageId, (err) => console.log(err))
+        res.send("post has been deleted");
+    } catch (err) {
+        console.log(err);
+        res.send("there was an error");
+    }
+});
 
-app.get("/comments/:id", async (req,res) => {
+
+app.get("/comments/:postId/:id", async (req,res) => {
     const commentId = req.params.id;
 
     try{
@@ -69,8 +95,23 @@ app.get("/comments/:id", async (req,res) => {
         console.log(err);
         res.send("there was an error");
     }
-
 })
+
+app.delete("/comments/:postId/:id", async (req, res) => {
+    const commentId = req.params.id;
+    const postId = req.params.postId
+    try {
+        const Comment = mongoose.model("comments", commentSchema)
+        const Post = mongoose.model("posts", postSchema)
+        const dbRes = await Comment.findByIdAndDelete(commentId);
+        const PostData = await Post.findOneAndUpdate({ _id: postId }, {"$pull": {comments: commentId}}, { new: true })
+        cloudinary.uploader.destroy(dbRes.image?.imageId, (err) => console.log(err))
+        res.send("post has been deleted");
+    } catch (err) {
+        console.log(err);
+        res.send("there was an error");
+    }
+});
 
 
 
@@ -124,6 +165,8 @@ app.put("/detailpost/:name/:id",upload.single() ,async (req, res) => {
         res.send("there was an error");
     }
 });
+
+
 
 
 

@@ -5,7 +5,7 @@ import axios from "axios";
 
 const CreatePost = () => {
     const {allCategories,setAllCategories} = useContext(categorieContext)
-    const [categorie,setCategorie] = useState()
+    const [categorie,setCategorie] = useState(allCategories[0])
     const {loggedUser,setLoggedUser} = useContext(loggedUserContext)
 
     const createNewPost =  async (event) => {

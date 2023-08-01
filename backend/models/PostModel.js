@@ -34,3 +34,6 @@ export const postSchema = new mongoose.Schema({
 
 
 export const Post = mongoose.model("Post", postSchema)
+export const Hakunamatata = mongoose.model("Hakunamatata", postSchema)
+export const Test = mongoose.model("Test", postSchema)
+export const General = mongoose.model("General", postSchema)
