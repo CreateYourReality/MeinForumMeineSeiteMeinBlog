@@ -10,21 +10,35 @@ const DetailPost = () => {
     const {name} = useParams()
     const {id} = useParams()
     const {loggedUser} = useContext(loggedUserContext)
-    const [allComments, setAllComments] = useState([])
+    //const [allComments, setAllComments] = useState([])
+    const [allCommentFields,setAllCommentFields] = useState([])
 
+
+    const getCommentFields = async (commentID) => {
+      let commentArray = []
+      try {
+        const commentData = await axios.get(`http://localhost:3001/comments/${commentID}`)
+        commentArray.push(commentData.data[0].content)
+        commentArray.push(commentData.data[0].author)
+        commentArray.push(commentData.data[0].image.url)
+      }catch (error) {
+        console.error('Fehler beim Abrufen der Daten:', error);       
+  }
+    setAllCommentFields(prevState => [...prevState,commentArray])
+}
 
     useEffect(() => {
         const fetchData = async () => {
           try {
             const response = await axios.get(`http://localhost:3001/categories/${name}/${id}`); //http://localhost:3001/categories/${name}
             setData(response.data);
-            setAllComments(response.data[0].comments)
-            
+            await response.data[0].comments.forEach(async (comment) => {
+              await getCommentFields(comment);
+            })
  //           console.log(data);
           } catch (error) {
             console.error('Fehler beim Abrufen der Daten:', error);
           }
-           
         };
         
         fetchData();
@@ -41,8 +55,7 @@ const DetailPost = () => {
         const secFormData = new FormData()
         secFormData.append("commentId", commentId)
 
-        console.log(secFormData);
-        console.log(secFormData.get("commentId"));
+
         const change = await axios.put(`http://localhost:3001/detailpost/${name}/${id}`, secFormData); 
 
       }
@@ -51,6 +64,10 @@ const DetailPost = () => {
       const compareAuthor = () => {
         console.log(loggedUser == data.author ? "ja" : "nein");
       }
+
+
+ 
+  
 
    
     return (
@@ -78,11 +95,12 @@ const DetailPost = () => {
                                         <label htmlFor="image">Choose a picture:</label>
                                         <input type="file" id="image" name="image" accept="image/png, image/jpeg"></input>
                                     </div>
-                                    {console.log(allComments)}
-                                    {allComments? allComments.map((comment,index) => {
+                                    {allCommentFields? allCommentFields.map((comment,index) => {
                                       return (
                                           <article key={index}>
-                                            <p>{comment.content}</p>
+                                            <p>{comment[0]}</p>
+                                            <p>{comment[1]}</p>
+                                            <p>{comment[2]}</p>
                                           </article>
                                       ) 
                                     }): <p>Warte auf Comments...</p>}

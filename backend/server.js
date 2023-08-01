@@ -62,8 +62,9 @@ app.get("/comments/:id", async (req,res) => {
     const commentId = req.params.id;
 
     try{
-        const Comment = mongoose.model(req.params.name, commentSchema)
+        const Comment = mongoose.model("comments", commentSchema)
         const dbRes = await Comment.find({_id: commentId})
+        res.json(dbRes)
     } catch (err) {
         console.log(err);
         res.send("there was an error");
