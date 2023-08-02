@@ -5,13 +5,8 @@ import multer from "multer";
 import mongoose from "mongoose";
 import { v2 as cloudinary } from 'cloudinary';
 
-//Categorie <Generally> muss default bleiben, der Rest ist frei wählbar
-//Reihenfolge ist Wichtig, die Categories müssen hier aufgelistet werden
-//Nur wenn die Categorie hier importiert wird, wird sie Aufgelistet (ändern später)
-import { General } from "./models/PostModel.js"
+
 import { Post } from "./models/PostModel.js"
-import { Hakunamatata } from "./models/PostModel.js";
-import { Test } from "./models/PostModel.js";
 
 import CollectionName from "./models/index.js";
 import { postSchema } from "./models/PostModel.js";
@@ -19,13 +14,7 @@ import {commentSchema} from "./models/CommentModel.js"
 
 //import { Author } from "./models/AuthorModel.js"
 import "./models/index.js"
-
-
-
-
-
-
-          
+ 
 cloudinary.config({ 
   cloud_name: 'dpdeiwzu8', 
   api_key: '927492337474971', 
@@ -97,14 +86,15 @@ app.get("/comments/:postId/:id", async (req,res) => {
     }
 })
 
-app.delete("/comments/:postId/:id", async (req, res) => {
+app.delete("/comments/:categorie/:postId/:id", async (req, res) => {
     const commentId = req.params.id;
     const postId = req.params.postId
+    const categorie = req.params.categorie
     try {
         const Comment = mongoose.model("comments", commentSchema)
-        const Post = mongoose.model("posts", postSchema)
+        const Post = mongoose.model(categorie, postSchema)
         const dbRes = await Comment.findByIdAndDelete(commentId);
-        const PostData = await Post.findOneAndUpdate({ _id: postId }, {"$pull": {comments: commentId}}, { new: true })
+        await Post.findOneAndUpdate({ _id: postId }, {"$pull": {comments: commentId}}, { new: true })
         cloudinary.uploader.destroy(dbRes.image?.imageId, (err) => console.log(err))
         res.send("post has been deleted");
     } catch (err) {
@@ -118,20 +108,34 @@ app.delete("/comments/:postId/:id", async (req, res) => {
 
 app.post("/categories/:name", upload.single("image"), async (req, res) => {
     try {
-      /*  const author = await Author.findById(req.body.author)
-        if (author === null) {
-          return res.send("Author is invalid")
-        } */
-        const Post = mongoose.model(req.params.name, postSchema)
-       cloudinary.uploader.upload_stream({ resource_type: "image", folder: "777kun" }, async (err, result) => {
-            const response = await Post.create({ ...req.body, image: { url: result.secure_url, imageId: result.public_id } })
-            res.json(response)
-        }).end(req.file.buffer)
+      /* const author = await Author.findById(req.body.author)
+      if (author === null) {
+        return res.send("Author is invalid")
+      } */
+  
+      const Post = mongoose.model(req.params.name, postSchema)
+  
+      if (!req.file) {
+        // Wenn kein Bild ausgewählt wurde, einfach ohne Bild speichern
+        const response = await Post.create({ ...req.body });
+        res.json(response);
+        return;
+      }
+  
+      cloudinary.uploader.upload_stream({ resource_type: "image", folder: "777kun" }, async (err, result) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send("There was an error uploading the image");
+          return;
+        }
+        const response = await Post.create({ ...req.body, image: { url: result.secure_url, imageId: result.public_id } });
+        res.json(response);
+      }).end(req.file.buffer);
     } catch (err) {
-        console.log(err)
-        res.status(500).send("there was an error")
+      console.log(err);
+      res.status(500).send("There was an error");
     }
-})
+  });
 
 
 app.post("/detailpost/:name/:id", upload.single("image"), async (req, res) => {

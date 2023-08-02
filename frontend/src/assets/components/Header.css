@@ -1,0 +1,9 @@
+header{
+    height: 5vh;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    background-color: pink;
+    padding: 15px;
+}
+

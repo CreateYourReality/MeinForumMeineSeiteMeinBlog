@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 
 export const postSchema = new mongoose.Schema({
-    title: {
+    threadTitle: {
         type: String,
         minlength: 5,
         maxlength: 50,
@@ -31,9 +31,13 @@ export const postSchema = new mongoose.Schema({
     
 })
 
+//Categorie <Generally> muss default bleiben, der Rest ist frei wählbar
+//Reihenfolge ist Wichtig, die Categories müssen hier aufgelistet werden
+//Nur wenn die Categorie hier importiert wird, wird sie Aufgelistet (ändern später)
 
-
+export const General = mongoose.model("General", postSchema)
 export const Post = mongoose.model("Post", postSchema)
 export const Hakunamatata = mongoose.model("Hakunamatata", postSchema)
 export const Test = mongoose.model("Test", postSchema)
-export const General = mongoose.model("General", postSchema)
+export const Test2 = mongoose.model("Test2", postSchema)
+

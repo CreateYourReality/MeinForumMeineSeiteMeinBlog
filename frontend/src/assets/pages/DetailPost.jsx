@@ -5,7 +5,7 @@ import axios from "axios";
 import {Link} from "react-router-dom"
 import { loggedUserContext } from "../../context/Context";
 import "./DetailPost.css"
-
+import Header from "../components/Header";
 
 const DetailPost = () => {
     const [refresh,setRefresh] = useState(false);
@@ -74,7 +74,7 @@ const DetailPost = () => {
 
 
       const deleteComment = async (commentId) => {
-        await axios.delete(`http://localhost:3001/comments/${id}/${commentId}`); 
+        await axios.delete(`http://localhost:3001/comments/${name}/${id}/${commentId}`); 
         await refreshSite();
       }
 
@@ -89,13 +89,14 @@ const DetailPost = () => {
    
     return (
         <>
+        <Header/>
             <main>
             {data?
                   data.map((post,index) => {
                     return(
                       <article className="singlePost" key={index}>
                         <h2>{post.title}</h2>
-                        <img src={post.image.url} alt="" />
+                        {post.image?<img src={post.image.url} alt="" /> : null}
                         <p>{post.content}</p>
                         <p>Author:<Link>{post.author}</Link></p>
                         <p>Thread: {post._id}</p>
@@ -119,7 +120,7 @@ const DetailPost = () => {
                                           <article className="singleComment" key={index}>
                                             <h6>id:{comment[3]}</h6>
                                             <div className="singleCommentText">
-                                              <img src={comment[2]}/>
+                                            {comment[2]?<img src={comment[2]}/> : null}
                                               <p>{comment[0]}</p>
                                             </div>
                                             <h6>Author: {comment[1]}</h6>

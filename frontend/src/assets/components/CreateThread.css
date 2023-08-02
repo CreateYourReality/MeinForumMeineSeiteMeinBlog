@@ -5,26 +5,42 @@
     flex-direction: column;
     min-height: 40%;
     max-height: 40%;
+    padding: 15px;
+    margin: 10px;
+    background-color: lightgoldenrodyellow;
+    border-radius: 5px;
+    border: 1px groove black;
 }
-
 
 .createNewPostSection form input[type="text"]{
     height: 20px;
-    width: 200px;
+    width: 275px;
+    margin: 5px;
 }
 
 .createNewPostSection textarea{
     resize: none;
     height: 150px;
-    width: 200px;
+    width: 275px;
 }   
 
 .createNewPostSection form div{
-    margin-top: 10px;
+    margin: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     border: 1px solid black;
     padding: 10px;
+}
+
+.createNewPostSection select{
+    width: 275px;
+    height: 20px;
+}
+
+.createNewPostSection form input[type="submit"]{
+    margin: 10px;
+    width: 275px;
+    height: 30px;
 }

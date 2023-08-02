@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import {Link} from "react-router-dom"
 import "./Categories.css"
+import Header from "../components/Header";
+
 
 const Categories = () => {
     const [data,setData] = useState([])
@@ -26,6 +28,7 @@ const Categories = () => {
 
     return ( 
         <>
+          <Header/>
             <main>
                 <h1>{name}</h1>
                 {data?
@@ -33,7 +36,7 @@ const Categories = () => {
                     return(
                       <article className="singlePost" key={index}>
                         <h2>{post.title}</h2>
-                        <img src={post.image.url} alt="" />
+                        {post.image? <img src={post.image.url} alt="" /> : null}
                         <p>{post.content}</p>
                         <p>Author:<Link>{post.author}</Link></p>
                         <p>To Thread: <Link to={`/detailpost/${name}/${post._id}`}>{post._id}</Link></p>

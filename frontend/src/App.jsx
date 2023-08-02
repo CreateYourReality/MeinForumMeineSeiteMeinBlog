@@ -2,7 +2,7 @@ import Home from './assets/pages/home'
 import Categories from './assets/pages/Categories';
 import './App.css'
 import { BrowserRouter,Routes,Route } from 'react-router-dom'
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { categorieContext,loggedUserContext } from './context/Context';
 import DetailPost from './assets/pages/DetailPost';
 
