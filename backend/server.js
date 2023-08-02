@@ -4,16 +4,20 @@ import morgan from "morgan";
 import multer from "multer";
 import mongoose from "mongoose";
 import { v2 as cloudinary } from 'cloudinary';
-
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+import path from "path";
 
 import { Post } from "./models/PostModel.js"
 
 import CollectionName from "./models/index.js";
 import { postSchema } from "./models/PostModel.js";
-import {commentSchema} from "./models/CommentModel.js"
+import { commentSchema } from "./models/CommentModel.js"
+
+import { userRouter } from "./user/routes.js";
 
 //import { Author } from "./models/AuthorModel.js"
-import "./models/index.js"
+//import "./models/index.js"
  
 cloudinary.config({ 
   cloud_name: 'dpdeiwzu8', 
@@ -21,21 +25,40 @@ cloudinary.config({
   api_secret: 'hrbWuHwrvSGvHMXvWCxuz9yHOgc' 
 });
 
+dotenv.config({
+    path: path.join(path.resolve(), "..", ".env"),
+  });
+/*  
+  await mongoose.connect(process.env.DB); */
+
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT //|| 3001;
 const upload = multer({ storage: multer.memoryStorage() })
 
-app.use(cors())
-app.use(morgan("dev"))
-app.use(express.json())
+//const ReactAppDistPath = new URL("../frontend/dist/", import.meta.url);
+//const ReactAppIndex = new URL("../frontend/dist/index.html", import.meta.url);
+
+app.use(cors()) // SOLLTE EIGENTLICH WEG ?!?!?!?!
+//app.use(morgan("dev"))
+app.use(express.json());
+app.use(cookieParser());
+//app.use(express.static(ReactAppDistPath.pathname));
 
 
+
+
+
+// ###### ROUTEN ######
+app.use("/api/user", userRouter);
 
 app.get("/777kun", async (req, res) => {
     const data = await Post.find()
     res.json(data)
 })
 
+/*app.get("/*", (req, res) => {
+    res.sendFile(ReactAppIndex.pathname);
+  });*/
 
 app.get("/categories/:name", async(req,res) => {
     let data = [];//data = await Post.find();
@@ -170,7 +193,17 @@ app.put("/detailpost/:name/:id",upload.single() ,async (req, res) => {
     }
 });
 
+app.get('/collectionNames', async (req, res) => {
+    try {
 
+      const collections = await CollectionName
+      res.json(collections);
+
+    } catch (error) {
+      console.error('Error fetching collection names:', error);
+      res.status(500).json({ error: 'Failed to fetch collection names' });
+    }
+  });
 
 
 
@@ -246,16 +279,6 @@ app.get("/author/:authorId", async (req, res) => {
     }
 }); */
 
-app.get('/collectionNames', async (req, res) => {
-    try {
 
-      const collections = await CollectionName
-      res.json(collections);
-
-    } catch (error) {
-      console.error('Error fetching collection names:', error);
-      res.status(500).json({ error: 'Failed to fetch collection names' });
-    }
-  });
 
 app.listen(PORT, () => console.log("Der Server läuft", PORT))
