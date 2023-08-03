@@ -35,7 +35,7 @@ const Categories = () => {
                   data.map((post,index) => {
                     return(
                       <article className="singlePost" key={index}>
-                        <h2>{post.title}</h2>
+                        <h2>{post.threadTitle}</h2>
                         {post.image? <img src={post.image.url} alt="" /> : null}
                         <p>{post.content}</p>
                         <p>Author:<Link>{post.author}</Link></p>

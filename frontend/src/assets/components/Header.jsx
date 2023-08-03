@@ -39,7 +39,8 @@ const Header = () => {
         )}
         {isLoggedIn && (
           <>
-            <a href="/profile">Profile</a>
+            {location.pathname != "/profile" ?
+             <a href="/profile">Profile</a> : null}
             <button id="logoutBtn" type="button" onClick={logout}>Logout</button>
             <button onClick={getUsername}>GET USER INFO</button>
           </>

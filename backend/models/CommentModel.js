@@ -11,7 +11,7 @@ export const commentSchema = new mongoose.Schema({
         required: true
     },
     author: {
-        type: mongoose.Types.ObjectId,
+        type: String,
         required: true,
         immutable: true,
     }, 

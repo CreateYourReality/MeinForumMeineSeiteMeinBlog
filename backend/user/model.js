@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { Schema, model } from "mongoose";
 
 export const userSchema = new Schema({
-  name: String,
+  userName: { type: String, unique: true},
   email: { type: String, unique: true, lowercase: true },
   salt: { type: String, required: true, select: false },
   hash: { type: String, required: true, select: false },

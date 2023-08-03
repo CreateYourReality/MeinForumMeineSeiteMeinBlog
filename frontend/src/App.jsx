@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { categorieContext } from './context/Context';
 import DetailPost from './assets/pages/DetailPost';
 import SignUpPage from './assets/pages/SignUpPage';
-
+import UserProfile from './assets/pages/UserProfile';
 function App() {
   const [allCategories,setAllCategories] = useState([])
   
@@ -25,6 +25,7 @@ function App() {
             }
             <Route path="/detailpost/:name/:id" element={<DetailPost/>}> </Route>
             <Route path="/signup" element={<SignUpPage/>}> </Route>
+            <Route path="/profile" element={<UserProfile/>}> </Route>
           </Routes>
         </main>
       </categorieContext.Provider>

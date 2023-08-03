@@ -2,10 +2,12 @@ import { useContext, useState } from "react";
 import "./CreateThread.css"
 import { categorieContext, loggedUserContext } from "../../context/Context";
 import axios from "axios";
+import { UserContext } from "../user/UserContext";
 
 const CreateThread = () => {
     const {allCategories,setAllCategories} = useContext(categorieContext)
     const [categorie,setCategorie] = useState("generals")
+    const {user} = useContext(UserContext)
 
     const createNewPost =  async (event) => {
         event.preventDefault()
@@ -23,11 +25,12 @@ const CreateThread = () => {
     }
 
 
-
+    
 
     return ( 
         <>
             <section className="createNewPostSection">
+                {console.log(user)}
                 <form onSubmit={createNewPost}>
                     <h3>Create new Thread</h3>
                     <select onChange={handleSelect} name="" id="">
@@ -46,7 +49,7 @@ const CreateThread = () => {
                         <input type="file" id="image" name="image" accept="image/png, image/jpeg"></input>
                     </div>
                     <label htmlFor="author">Author:
-                        <input readOnly name="author" value="PLATZHALTER" />
+                        <input readOnly name="author" value={user? user.userName : "GUEST"} />
                     </label>
                     <input type="submit" value={"neuen Post erstellen"}/>
                 </form>

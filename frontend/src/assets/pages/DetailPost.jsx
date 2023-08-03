@@ -6,6 +6,7 @@ import {Link} from "react-router-dom"
 import { loggedUserContext } from "../../context/Context";
 import "./DetailPost.css"
 import Header from "../components/Header";
+import { UserContext } from "../user/UserContext";
 
 const DetailPost = () => {
     const [refresh,setRefresh] = useState(false);
@@ -13,6 +14,7 @@ const DetailPost = () => {
     const {name} = useParams()
     const {id} = useParams()
     const navigate = useNavigate();
+    const {user} = useContext(UserContext)
 
     const [allCommentFields,setAllCommentFields] = useState([])
 
@@ -106,8 +108,7 @@ const DetailPost = () => {
                                     <label htmlFor="content">Content: </label>
                                     <textarea name="content" id="commentContent" cols="30" rows="10"></textarea>
                                     <input readOnly name="postId" type="text" value={post._id}/>
-                                    <input readOnly name="author" type="text" value={"PLATZHALTER"}/>
-                                    <input readOnly name="title" type="text" value={post.title}/>
+                                    <input readOnly name="author" type="text" value={user?user.userName : "wait for username"}/>
                                     <input type="submit" />
                                     <div>
                                         <label htmlFor="image">Choose a picture:</label>

@@ -25,7 +25,7 @@ export default function Login() {
 
   return (
     <form onSubmit={submit}>
-      <input name="email" type="email" placeholder="your email" />
+      <input name="userName" type="text" placeholder="username" />
       <input name="password" type="password" placeholder="***********" />
       {error && <small style={{ color: "red" }}>{error}</small>}
       <button>Login</button>
