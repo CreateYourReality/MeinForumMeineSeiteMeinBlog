@@ -10,7 +10,6 @@ import path from "path";
 
 import { Post } from "./models/PostModel.js"
 
-import CollectionName from "./models/index.js";
 import { postSchema } from "./models/PostModel.js";
 import { commentSchema } from "./models/CommentModel.js"
 
@@ -31,22 +30,36 @@ dotenv.config({
 /*  
   await mongoose.connect(process.env.DB); */
 
+await mongoose.connect(process.env.DB);
+await mongoose.connection.syncIndexes();
+
+const PORT = process.env.PORT || 3001;
 const app = express();
-const PORT = process.env.PORT //|| 3001;
+
+
 const upload = multer({ storage: multer.memoryStorage() })
 
 //const ReactAppDistPath = new URL("../frontend/dist/", import.meta.url);
 //const ReactAppIndex = new URL("../frontend/dist/index.html", import.meta.url);
 
 app.use(cors()) // SOLLTE EIGENTLICH WEG ?!?!?!?!
-//app.use(morgan("dev"))
+app.use(morgan("dev"))
 app.use(express.json());
 app.use(cookieParser());
 //app.use(express.static(ReactAppDistPath.pathname));
 
+const refreshCollections = () => {
+    let collections = [];
+    let names = [];
+    collections = mongoose.connections[0].collections;
+    console.log(mongoose.connections[0]);
+    Object.keys(collections).forEach(k =>  {
+        names.push(k);
+    });
+    return names; 
+}
 
-
-
+let CollectionName = refreshCollections()
 
 // ###### ROUTEN ######
 app.use("/api/user", userRouter);
@@ -205,7 +218,11 @@ app.get('/collectionNames', async (req, res) => {
     }
   });
 
+  app.get("/api/status", (req, res) => {
+    res.send({ status: "Ok" });
+  });
 
+  app.listen(PORT, () => console.log("Der Server läuft", PORT))
 
 
 // USER
@@ -281,4 +298,3 @@ app.get("/author/:authorId", async (req, res) => {
 
 
 
-app.listen(PORT, () => console.log("Der Server läuft", PORT))

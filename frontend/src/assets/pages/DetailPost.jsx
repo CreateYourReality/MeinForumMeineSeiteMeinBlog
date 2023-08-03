@@ -13,7 +13,6 @@ const DetailPost = () => {
     const {name} = useParams()
     const {id} = useParams()
     const navigate = useNavigate();
-    const {loggedUser} = useContext(loggedUserContext)
 
     const [allCommentFields,setAllCommentFields] = useState([])
 
@@ -95,7 +94,7 @@ const DetailPost = () => {
                   data.map((post,index) => {
                     return(
                       <article className="singlePost" key={index}>
-                        <h2>{post.title}</h2>
+                        <h2>{post.threadTitle}</h2>
                         {post.image?<img src={post.image.url} alt="" /> : null}
                         <p>{post.content}</p>
                         <p>Author:<Link>{post.author}</Link></p>
@@ -107,7 +106,7 @@ const DetailPost = () => {
                                     <label htmlFor="content">Content: </label>
                                     <textarea name="content" id="commentContent" cols="30" rows="10"></textarea>
                                     <input readOnly name="postId" type="text" value={post._id}/>
-                                    <input readOnly name="author" type="text" value={loggedUser}/>
+                                    <input readOnly name="author" type="text" value={"PLATZHALTER"}/>
                                     <input readOnly name="title" type="text" value={post.title}/>
                                     <input type="submit" />
                                     <div>

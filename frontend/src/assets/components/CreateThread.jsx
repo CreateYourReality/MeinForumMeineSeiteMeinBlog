@@ -6,7 +6,6 @@ import axios from "axios";
 const CreateThread = () => {
     const {allCategories,setAllCategories} = useContext(categorieContext)
     const [categorie,setCategorie] = useState("generals")
-    const {loggedUser,setLoggedUser} = useContext(loggedUserContext)
 
     const createNewPost =  async (event) => {
         event.preventDefault()
@@ -22,6 +21,9 @@ const CreateThread = () => {
     const handleSelect = () => {
         setCategorie(event.target.value)
     }
+
+
+
 
     return ( 
         <>
@@ -44,7 +46,7 @@ const CreateThread = () => {
                         <input type="file" id="image" name="image" accept="image/png, image/jpeg"></input>
                     </div>
                     <label htmlFor="author">Author:
-                        <input readOnly name="author" value={loggedUser} />
+                        <input readOnly name="author" value="PLATZHALTER" />
                     </label>
                     <input type="submit" value={"neuen Post erstellen"}/>
                 </form>

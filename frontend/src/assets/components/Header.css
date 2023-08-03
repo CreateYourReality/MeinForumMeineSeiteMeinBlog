@@ -3,7 +3,34 @@ header{
     display: flex;
     justify-content: start;
     align-items: center;
+    gap:15px;
     background-color: pink;
     padding: 15px;
+    width: 100%;
+
 }
 
+header a{
+    text-decoration: none;
+}
+
+h1{
+    color:black;
+    margin-left:15px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+h1:hover{
+    color:darkcyan;
+}
+
+header nav{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:15px;
+}
+
+#logoutBtn{
+    
+}
